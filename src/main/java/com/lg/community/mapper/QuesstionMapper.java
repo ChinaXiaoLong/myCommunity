@@ -1,8 +1,8 @@
 package com.lg.community.mapper;
 
-import com.lg.community.dto.QuestionDto;
 import com.lg.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -12,6 +12,9 @@ public interface QuesstionMapper {
             "VALUES(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{commentCount},#{viewCount},#{likeCount},#{tag})")
     void create(Question question);
 
-    @Select("SELECT * from question")
-    List<Question> list();
+    @Select("SELECT * from question limit #{offset},#{size}")
+    List<Question> list(@Param(value = "offset") Integer offset, @Param(value = "size")Integer size);
+
+    @Select("SELECT count(1) from question")
+    Integer count();
 }

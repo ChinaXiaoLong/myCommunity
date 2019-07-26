@@ -1,5 +1,6 @@
 package com.lg.community.service.impl;
 
+import com.lg.community.dto.PageDto;
 import com.lg.community.dto.QuestionDto;
 import com.lg.community.mapper.QuesstionMapper;
 import com.lg.community.mapper.UserMapper;
@@ -20,10 +21,12 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     UserMapper userMapper;
     @Override
-    public List<QuestionDto> list() {
-        List<Question> questions = quesstionMapper.list();
+    public PageDto list(Integer page, Integer size) {
+        Integer offset = size*(page -1);
+        List<Question> questions = quesstionMapper.list(offset,size);
         if(questions.size() >0){
             List<QuestionDto> questionDtos = new ArrayList<>();
+            PageDto pageDto = new PageDto();
             for (Question qusstion:
                     questions) {
                 User user = userMapper.findById(qusstion.getCreator());
@@ -32,7 +35,10 @@ public class QuestionServiceImpl implements QuestionService {
                 questionDto.setUser(user);
                 questionDtos.add(questionDto);
             }
-            return questionDtos;
+            pageDto.setQuestions(questionDtos);
+            Integer totalCount = quesstionMapper.count();
+            pageDto.setPageination(totalCount,page,size);
+            return pageDto;
         }else {
         return null;
         }

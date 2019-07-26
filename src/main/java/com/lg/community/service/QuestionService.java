@@ -1,9 +1,7 @@
 package com.lg.community.service;
 
-import com.lg.community.dto.QuestionDto;
-
-import java.util.List;
+import com.lg.community.dto.PageDto;
 
 public interface QuestionService {
-    List<QuestionDto> list();
+    PageDto list(Integer page, Integer size);
 }
