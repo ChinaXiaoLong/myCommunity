@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="css/community.css">
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -15,7 +16,7 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">交流社区</span>
             </button>
-            <a class="navbar-brand" href="#">交流社区</a>
+            <a class="navbar-brand" href="/">交流社区</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -27,6 +28,9 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
+                <li th:if="${session.user != null}">
+                    <a href="/publish">发布</a>
+                </li>
                 <li class="dropdown" th:if="${session.user != null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}"> <span class="caret"></span></a>
                     <ul class="dropdown-menu">
@@ -43,5 +47,38 @@
         </div>
     </div>
 </nav>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h3>
+            <hr>
+            <div class="media" th:each="question:${questions}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-rounded"
+                             th:src="${question.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading" th:text="${question.title}"></h4>
+                    <span th:text="${question.description}"></span>
+                    <br/>
+                    <span class="test-desc">
+                        <span th:text="${question.commentCount}"></span>个评论
+                            • <span th:text="${question.viewCount}"></span> 次浏览
+                            • <span th:text="${#dates.format(question.gmtCreate,'dd MMMM yyyy')}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h2>问题发起指南</h2>
+            1.请用精简的语言描述发布的问题，不超过25个字。<br/>
+            2.问题补充：详细补充问题能容，确保问题清晰直观，并提供一些相关资料。<br/>
+            3.标签：选择一个合适的标签，不超过10个字。<br/>
+            4.关于积分：发起一个问题消耗20个积分，每多一个回复加5个积分。<br/>
+        </div>
+    </div>
+</div>
 </body>
 </html>
